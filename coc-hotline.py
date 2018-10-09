@@ -32,8 +32,7 @@ def get_hotline_numbers():
         numbers_str = os.environ.get('COC_NUMBERS', None)
 
         if numbers_str is None:
-            msg = 'Environment variable COC_NUMBERS must be present and must be a comma delimited' \
-                  ' string of numbers with country codes'
+            msg = 'Environment variable COC_NUMBERS must be present and must be a comma delimited' ' string of numbers with country codes'
             raise ConfigurationError(msg)
 
         _HOTLINE_NUMBERS = {}
@@ -44,13 +43,11 @@ def get_hotline_numbers():
                 name = None
             _HOTLINE_NUMBERS[num.split(';')[0].strip()] = name
 
-
     if _AFTER_HOURS_NUMBERS is None:
         numbers_str = os.environ.get('COC_AFTER_HOURS_NUMBERS', None)
 
         if numbers_str is None:
-            msg = 'Environment variable COC_AFTER_HOURS_NUMBERS must be present and must be a' \
-                  ' comma delimited string of numbers with country codes'
+            msg = 'Environment variable COC_AFTER_HOURS_NUMBERS must be present and must be a' ' comma delimited string of numbers with country codes'
             raise ConfigurationError(msg)
 
         _AFTER_HOURS_NUMBERS = {}
@@ -111,13 +108,15 @@ def handle_answered(data):
         outgoing_number = hotline_numbers[outgoing_number]
     msg = f'Call from {incoming_number} answered by {outgoing_number}'
     print(msg)
-    msg_attachments = [{
-        'color': 'good',
-        'title': 'Call Answered',
-        'fallback': msg,
-        'text': f'Call from *{incoming_number}* answered by *{outgoing_number}*',
-        "mrkdwn_in": ["text", "pretext"],
-    }]
+    msg_attachments = [
+        {
+            'color': 'good',
+            'title': 'Call Answered',
+            'fallback': msg,
+            'text': f'Call from *{incoming_number}* answered by *{outgoing_number}*',
+            "mrkdwn_in": ["text", "pretext"],
+        }
+    ]
     send_slack_message('', msg_attachments)
 
 
@@ -130,14 +129,16 @@ def handle_completed(data):
         outgoing_number = hotline_numbers[outgoing_number]
     msg = f'Call from {incoming_number} to {outgoing_number} has completed'
     print(msg)
-    msg_attachments = [{
-        'color': 'good',
-        'title': 'Call Completed',
-        'fallback': msg,
-        'text': f'Call from *{incoming_number}* to *{outgoing_number}* has completed\n'
-                f'Call lasted for {call_duration} seconds',
-        "mrkdwn_in": ["text", "pretext"],
-    }]
+    msg_attachments = [
+        {
+            'color': 'good',
+            'title': 'Call Completed',
+            'fallback': msg,
+            'text': f'Call from *{incoming_number}* to *{outgoing_number}* has completed\n'
+            f'Call lasted for {call_duration} seconds',
+            "mrkdwn_in": ["text", "pretext"],
+        }
+    ]
     send_slack_message('', msg_attachments)
 
 
@@ -161,13 +162,15 @@ def incoming_call():
     incoming_number = request.values.get('From')
     msg = f'Incoming call from {incoming_number}'
     print(msg)
-    msg_attachments = [{
-        'color': 'danger',
-        'title': 'Incoming Call',
-        'fallback': msg,
-        'text': f'From *{incoming_number}*',
-        "mrkdwn_in": ["text", "pretext"],
-    }]
+    msg_attachments = [
+        {
+            'color': 'danger',
+            'title': 'Incoming Call',
+            'fallback': msg,
+            'text': f'From *{incoming_number}*',
+            "mrkdwn_in": ["text", "pretext"],
+        }
+    ]
     send_slack_message(f'<!channel>', msg_attachments)
     status_url = url_for('call_status', _external=True, _scheme=get_http_scheme())
 
@@ -198,21 +201,26 @@ def incoming_sms():
         for i in range(num_media):
             media_url = request.values.get(f"MediaUrl{i}")
             text += f"\n  - {media_url}"
-    msg_attachments = [{
-        'color': 'danger',
-        'title': 'Incoming SMS',
-        'fallback': msg,
-        'text': text,
-        "mrkdwn_in": ["text", "pretext"],
-    }]
+    msg_attachments = [
+        {
+            'color': 'danger',
+            'title': 'Incoming SMS',
+            'fallback': msg,
+            'text': text,
+            "mrkdwn_in": ["text", "pretext"],
+        }
+    ]
     send_slack_message(f'<!channel>', msg_attachments)
     response = MessagingResponse()
-    response.message("Thank you for contacting the PyCon US incident hotline, "
-                     f"a responder will contact you at {incoming_number}.")
+    response.message(
+        "Thank you for contacting the DjangoCon US incident hotline, "
+        f"a responder will contact you at {incoming_number}."
+    )
     return str(response)
 
 
 if __name__ == '__main__':
     from waitress import serve
+
     port = os.environ.get('PORT', 8080)
     serve(app, host='0.0.0.0', port=port, threads=8)
