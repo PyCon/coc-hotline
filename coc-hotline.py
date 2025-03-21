@@ -239,5 +239,9 @@ if __name__ == "__main__":
     get_slack_url()
 
     print('starting server...')
-    port = os.environ.get("PORT", 8080)
-    serve(app, host="0.0.0.0", port=port, threads=8)
+    uds = os.environ.get("UDS", None)
+    if uds is not None:
+        serve(app, unix_socket=uds)
+    else:
+        port = os.environ.get("PORT", 8080)
+        serve(app, host="0.0.0.0", port=port, threads=8)
