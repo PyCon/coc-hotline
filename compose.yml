@@ -1,0 +1,11 @@
+services:
+  hotline:
+    build:
+      context: .
+    env_file: env
+    volumes:
+      - ./coc-hotline.py:/code/coc-hotline.py
+    command: python coc-hotline.py
+    stop_signal: SIGINT
+    ports:
+      - "8080:8080"

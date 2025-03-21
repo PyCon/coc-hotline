@@ -96,3 +96,5 @@ ENV/
 
 config.yaml
 zappa_settings.json
+
+env

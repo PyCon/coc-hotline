@@ -234,6 +234,10 @@ def incoming_sms():
 
 if __name__ == "__main__":
     from waitress import serve
+    get_hotline_numbers()
+    get_http_scheme()
+    get_slack_url()
 
+    print('starting server...')
     port = os.environ.get("PORT", 8080)
     serve(app, host="0.0.0.0", port=port, threads=8)
