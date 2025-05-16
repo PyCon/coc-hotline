@@ -233,7 +233,7 @@ def incoming_sms():
 
 @app.route("/_health")
 @app.route("/_health/")
-def health()
+def health():
     return "OK"
 
 
