@@ -231,6 +231,11 @@ def incoming_sms():
     )
     return str(response)
 
+@app.route("/_health")
+@app.route("/_health/")
+def health()
+    return "OK"
+
 
 if __name__ == "__main__":
     from waitress import serve
